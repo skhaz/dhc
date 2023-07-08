@@ -1,0 +1,7 @@
+{
+  "name": "@skhaz/dhc",
+  "version": "1.0.0",
+  "description": "Delta/Huffman Data Compressor (DHC)",
+  "main": "index.js",
+  "license": "ISC"
+}

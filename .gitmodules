@@ -1,0 +1,3 @@
+[submodule "dhc"]
+	path = lib/dhc
+	url = https://github.com/marcelobarrosalmeida/dhc.git
