@@ -1,0 +1,71 @@
+name: release
+
+on:
+  push:
+    branches:
+      - "main"
+      - "releases/**"
+
+permissions:
+  actions: "write"
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [buildjet-4vcpu-ubuntu-2204, buildjet-4vcpu-ubuntu-2204-arm]
+        node: ["18"]
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+          cache: "npm"
+
+      - name: Install
+        run: npm install --ignore-scripts
+
+      - name: Prebuildify for ${{ matrix.os }} and Node.js ${{ matrix.node }}
+        run: npm run prebuildify
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: prebuilds
+          path: prebuilds
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "npm"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Download prebuilt artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: prebuilds
+          path: prebuilds
+
+      - name: Install and build TypeScript
+        run: npm install && npm run build:ts
+
+      - name: Publish
+        run: npm publish --access=public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
