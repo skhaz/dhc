@@ -3,5 +3,9 @@
   "version": "1.0.0",
   "description": "Delta/Huffman Data Compressor (DHC)",
   "main": "index.js",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "node-addon-api": "^7.0.0",
+    "node-gyp": "^9.4.0"
+  }
 }
