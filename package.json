@@ -6,7 +6,8 @@
   "license": "ISC",
   "devDependencies": {
     "nan": "^2.17.0",
-    "node-gyp": "^9.4.0"
+    "node-gyp": "^9.4.0",
+    "typescript": "^5.1.6"
   },
   "scripts": {
     "build": "node-gyp -j 8 build"
